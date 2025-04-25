@@ -20,10 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    // معلومات الاتصال بقاعدة البيانات
-    String url = "jdbc:mysql://localhost:3306/clinic_system";
-    String user = "root"; // غيرها إذا كان عندك اسم مستخدم مختلف
-    String password = "0000"; // اكتب كلمة مرور MySQL إن وجدت
+   
     public LoginForm() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -167,32 +164,39 @@ jLabel1.setIcon(new ImageIcon(img));
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
-       String usernameInput = txtuser.getText();
-        String passwordInput = new String(txtpass.getPassword());
+    String usernameInput = txtuser.getText();
+String passwordInput = new String(txtpass.getPassword());
 
-        try {
-            Connection con = DriverManager.getConnection(url, user, password);
-            String sql = "SELECT * FROM patients WHERE username=? AND password=?";
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, usernameInput);
-            pst.setString(2, passwordInput);
+String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+String dbuser = "root";
+String dbpass = "0000";
 
-            ResultSet rs = pst.executeQuery();
+try {
+    Connection con = DriverManager.getConnection(url, dbuser, dbpass);
 
-            if (rs.next()) {
-                JOptionPane.showMessageDialog(this, "تم تسجيل الدخول بنجاح");
-                // افتح لوحة المريض مثلاً
-                PatientDashboard dashboard = new PatientDashboard();
-                dashboard.setVisible(true);
-                this.dispose(); // إغلاق نافذة الدخول
-            } else {
-                JOptionPane.showMessageDialog(this, "اسم المستخدم أو كلمة المرور غير صحيحة");
-            }
+    String sql = "SELECT * FROM User WHERE username=? AND password=? AND role='patient'";
+    PreparedStatement pst = con.prepareStatement(sql);
+    pst.setString(1, usernameInput);
+    pst.setString(2, passwordInput);
 
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "حدث خطأ: " + e.getMessage());
-        }
+    ResultSet rs = pst.executeQuery();
+
+    if (rs.next()) {
+        JOptionPane.showMessageDialog(this, "تم تسجيل الدخول بنجاح");
+
+        // فتح واجهة المريض مباشرة
+        PatientDashboard dashboard = new PatientDashboard(); 
+        dashboard.setVisible(true);
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "اسم المستخدم أو كلمة المرور غير صحيحة أو أنك لست مريضًا");
+    }
+
+    con.close();
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(this, "حدث خطأ في الاتصال بقاعدة البيانات: " + e.getMessage());
+}
+
     }//GEN-LAST:event_loginbtnActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
