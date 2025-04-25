@@ -21,17 +21,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PatientDashboard extends javax.swing.JFrame {
 
-    public void fillTableFromDatabase() {
+   public void fillTableFromDatabase() {
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
 
     String query = "SELECT a.appointment_id, d.name AS doctor_name, s.name AS specialization, " +
-               "a.appointment_date, a.appointment_time, a.status " +
-               "FROM Appointment a " +
-               "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
-               "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
-               "WHERE a.patient_id = 1"; // بدل الرقم حسب المستخدم
+                   "a.appointment_date, a.appointment_time, a.status " +
+                   "FROM Appointment a " +
+                   "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
+                   "JOIN Specialization s ON d.specialization_id = s.specialization_id " 
+                   ; // بدل الرقم حسب المستخدم
 
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     model.setRowCount(0); // Clear old data
@@ -42,16 +42,17 @@ public class PatientDashboard extends javax.swing.JFrame {
 
         while (rs.next()) {
             Object[] row = {
-    rs.getInt("appointment_id"),
-    rs.getDate("appointment_date"),
-    rs.getTime("appointment_time"),
-    rs.getString("doctor_name"),
-    rs.getString("specialization"),
-    rs.getString("status")
-};
+                rs.getInt("appointment_id"),
+                rs.getDate("appointment_date"),
+                rs.getTime("appointment_time"),
+                rs.getString("doctor_name"),
+                rs.getString("specialization"),
+                rs.getString("status")
+            };
             model.addRow(row);
-            System.err.println("jjjjj");
         }
+
+        model.fireTableDataChanged(); // تحديث الجدول بعد إضافة البيانات
 
     } catch (SQLException e) {
         e.printStackTrace();
@@ -70,6 +71,8 @@ public class PatientDashboard extends javax.swing.JFrame {
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
 fillTableFromDatabase();
+ // تحديث البيانات المعروضة في الجدول
+
 
 
     }
@@ -256,6 +259,11 @@ fillTableFromDatabase();
         jButton5.setText("Nearest bookings");
         jButton5.setActionCommand("");
         jButton5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -402,8 +410,12 @@ fillTableFromDatabase();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-fillTableFromDatabase();        // TODO add your handling code here:
+       // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+  fillTableFromDatabase();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
