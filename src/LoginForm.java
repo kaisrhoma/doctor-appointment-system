@@ -183,7 +183,10 @@ try {
 
     if (rs.next()) {
         JOptionPane.showMessageDialog(this, "تم تسجيل الدخول بنجاح");
+ String username = rs.getString("name"); // ← خذ اسم المستخدم من قاعدة البيانات
 
+    
+   
         // فتح واجهة المريض مباشرة
         PatientDashboard dashboard = new PatientDashboard(); 
         dashboard.setVisible(true);
