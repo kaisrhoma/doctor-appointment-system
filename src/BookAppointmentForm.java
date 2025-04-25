@@ -1,6 +1,16 @@
 
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,6 +29,7 @@ public class BookAppointmentForm extends javax.swing.JFrame {
      */
     public BookAppointmentForm() {
         initComponents();
+        fillTableFromDatabase();
         this.setLocationRelativeTo(null);
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
@@ -460,6 +471,53 @@ jLabel1.setIcon(new ImageIcon(img));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void fillTableFromDatabase() {
+    String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+    String user = "root";
+    String password = "1x9ma28w";
+
+    String query = "SELECT a.appointment_id, d.name AS doctor_name, s.name AS specialization, " +
+                   "a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
+                   "p.phone, a.note AS description, p.gender " +
+                   "FROM Appointment a " +
+                   "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
+                   "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
+                   "JOIN Patient p ON a.patient_id = p.patient_id " +
+                   "WHERE a.patient_id = 1"; // بدل الرقم حسب المستخدم
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // Clear old data
+
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(query)) {
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("appointment_id"),
+                rs.getString("doctor_name"),
+                rs.getString("specialization"),
+                rs.getDate("appointment_date"),
+                rs.getTime("appointment_time"),
+                rs.getString("patient_name"),
+                rs.getInt("age"),
+                rs.getString("phone"),
+                rs.getString("description"),
+                rs.getString("gender")
+            };
+            model.addRow(row);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
+    }
+}
+
+
+
+
+    // للتجربة فقط
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         new PatientDashboard().setVisible(true);
