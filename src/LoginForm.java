@@ -20,7 +20,10 @@ import javax.swing.JOptionPane;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-   
+    // معلومات الاتصال بقاعدة البيانات
+    String url = "jdbc:mysql://localhost:3306/clinic_system";
+    String user = "root"; // غيرها إذا كان عندك اسم مستخدم مختلف
+    String password = "0000"; // اكتب كلمة مرور MySQL إن وجدت
     public LoginForm() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -183,10 +186,7 @@ try {
 
     if (rs.next()) {
         JOptionPane.showMessageDialog(this, "تم تسجيل الدخول بنجاح");
- String username = rs.getString("name"); // ← خذ اسم المستخدم من قاعدة البيانات
 
-    
-   
         // فتح واجهة المريض مباشرة
         PatientDashboard dashboard = new PatientDashboard(); 
         dashboard.setVisible(true);
