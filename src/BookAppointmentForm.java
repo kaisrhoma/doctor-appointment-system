@@ -2,6 +2,7 @@
 import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -202,7 +203,7 @@ jLabel1.setIcon(new ImageIcon(img));
         jLabel7.setText("Phone No");
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Fmale" }));
 
         jLabel8.setText("Gender");
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -260,12 +261,12 @@ jLabel1.setIcon(new ImageIcon(img));
         jLabel9.setText("Specialization");
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "عظام", "مفاصل", "جراحة", "قواده" }));
 
         jLabel10.setText("Doctor's Name");
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "kais", "ahmed" }));
 
         jLabel11.setText("Available Date");
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -284,6 +285,11 @@ jLabel1.setIcon(new ImageIcon(img));
         jButton5.setBackground(new java.awt.Color(0, 204, 204));
         jButton5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -471,6 +477,35 @@ jLabel1.setIcon(new ImageIcon(img));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void insertAppointment() {
+    Integer patiendid = 1;
+    String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+    String user = "root";
+    String password = "1x9ma28w";
+
+    try (Connection con = DriverManager.getConnection(url, user, password)) {
+        Integer did = jComboBox3.getSelectedIndex() + 1;
+        String q2 = "INSERT INTO Appointment (patient_id, doctor_id, appointment_date, appointment_time, status, note) " +
+            "VALUES (?, ?, STR_TO_DATE(?, '%M %d, %Y'), STR_TO_DATE(?, '%l:%i%p'), ?, ?)";
+        PreparedStatement pst = con.prepareStatement(q2);
+        pst.setInt(1, patiendid);
+        pst.setInt(2, did);
+        pst.setString(3, datePicker1.getText());
+        pst.setString(4, timePicker1.getText());
+        pst.setString(5, "not completed");
+        pst.setString(6, jTextArea1.getText());
+
+        // You forgot this line:
+        pst.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "Appointment inserted successfully!");
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "There is an error: " + ex.toString());
+    }
+}
+
+    
+    
     public void fillTableFromDatabase() {
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
@@ -541,6 +576,12 @@ jLabel1.setIcon(new ImageIcon(img));
         new LoginForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        insertAppointment();
+        fillTableFromDatabase();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
