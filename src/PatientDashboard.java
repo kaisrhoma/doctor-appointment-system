@@ -25,7 +25,7 @@ public class PatientDashboard extends javax.swing.JFrame {
     PatientDashboard(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+// عرض بياتات الجدول  وايم المستخدم
  public void fillTableFromDatabase() {
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
@@ -67,6 +67,32 @@ public class PatientDashboard extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
 }
+ //عدد المرضى
+public void countTodayAppointments() {
+    String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+    String user = "root";
+    String password = "0000";
+
+    String query = "SELECT COUNT(*) AS total FROM appointment " +
+                   "WHERE patient_id = ? AND appointment_date = CURDATE()";
+
+    try (Connection conn = DriverManager.getConnection(url, user, password);
+         PreparedStatement pst = conn.prepareStatement(query)) {
+
+        pst.setInt(1,Session.userID ); // هذا هو الـ patient_id اللي مررناه
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            int count = rs.getInt("total");
+            jLabel9.setText(String.valueOf(count));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "فشل في جلب عدد المواعيد اليوم");
+    }
+}
 
   
 
@@ -80,6 +106,7 @@ public class PatientDashboard extends javax.swing.JFrame {
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
 fillTableFromDatabase();
+countTodayAppointments(); 
  // تحديث البيانات المعروضة في الجدول
 
 
