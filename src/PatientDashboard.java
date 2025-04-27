@@ -2,6 +2,7 @@
 import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,7 +22,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PatientDashboard extends javax.swing.JFrame {
 
-   public void fillTableFromDatabase() {
+    PatientDashboard(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+ public void fillTableFromDatabase() {
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
@@ -30,26 +35,29 @@ public class PatientDashboard extends javax.swing.JFrame {
                    "a.appointment_date, a.appointment_time, a.status " +
                    "FROM Appointment a " +
                    "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
-                   "JOIN Specialization s ON d.specialization_id = s.specialization_id " 
-                   ; // بدل الرقم حسب المستخدم
+                   "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
+                   "WHERE a.patient_id = ?"; // استخدم الـ ID للمريض في الاستعلام
 
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     model.setRowCount(0); // Clear old data
 
     try (Connection conn = DriverManager.getConnection(url, user, password);
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
+         PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        while (rs.next()) {
-            Object[] row = {
-                rs.getInt("appointment_id"),
-                rs.getDate("appointment_date"),
-                rs.getTime("appointment_time"),
-                rs.getString("doctor_name"),
-                rs.getString("specialization"),
-                rs.getString("status")
-            };
-            model.addRow(row);
+        stmt.setInt(1, Session.userID); // تمرير الـ ID الخاص بالمريض في الاستعلام
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("appointment_id"),
+                    rs.getDate("appointment_date"),
+                    rs.getTime("appointment_time"),
+                    rs.getString("doctor_name"),
+                    rs.getString("specialization"),
+                    rs.getString("status")
+                };
+                model.addRow(row);
+            }
         }
 
         model.fireTableDataChanged(); // تحديث الجدول بعد إضافة البيانات
@@ -59,6 +67,7 @@ public class PatientDashboard extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
 }
+
   
 
     public PatientDashboard() {
@@ -66,7 +75,7 @@ public class PatientDashboard extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
-        
+         jLabel2.setText("مرحباً، " + Session.username);
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
