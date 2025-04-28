@@ -75,7 +75,7 @@ jLabel1.setIcon(new ImageIcon(img));
 
         txtage.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Age", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        combgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "male", "fmale" }));
+        combgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txtnumper.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "contact NO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
