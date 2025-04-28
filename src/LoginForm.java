@@ -241,7 +241,7 @@ Session.username = rs.getString("username"); // الحصول على اسم ال�
         }
         //</editor-fold>
 
-        /* Create and display the form */
+       
         java.awt.EventQueue.invokeLater(() -> {
             new LoginForm().setVisible(true);
         });
