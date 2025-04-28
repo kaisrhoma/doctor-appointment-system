@@ -229,9 +229,7 @@ String role = jComboBox1.getSelectedItem().toString(); // "مريض" أو "دك�
 String url = "jdbc:mysql://localhost:3306/ClinicSystem";
 String user = "root";
 String dbpass = "0000";
-    String url = "jdbc:mysql://localhost:3306/clinic_system";
-    String user = "root";
-    String dbpass = "1x9ma28w";
+    
 
 if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
     JOptionPane.showMessageDialog(this, "يرجى تعبئة جميع الحقول المطلوبة");
