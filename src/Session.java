@@ -4,11 +4,8 @@
  * and open the template in the editor.
  */
 
-/**
- *
-<<<<<<< HEAD
- * @author HP
- */
+
+
 public class Session {
     public static int userID;
     public static String username;
