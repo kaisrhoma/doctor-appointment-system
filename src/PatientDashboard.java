@@ -102,6 +102,7 @@ public void countTodayAppointments() {
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
          jLabel2.setText("مرحباً، " + Session.username);
+         jLabel3.setText( Session.username);
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
