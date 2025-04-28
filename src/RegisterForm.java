@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -32,6 +33,13 @@ public class RegisterForm extends javax.swing.JFrame {
         icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
+jComboBox2.addItem("باطنية");
+jComboBox2.addItem("أطفال");
+jComboBox2.addItem("جلدية");
+jComboBox2.addItem("أسنان");
+jComboBox2.addItem("'أنف وأذن وحنجرة");
+// ... وهكذا
+
     }
 
     /**
@@ -57,12 +65,12 @@ jLabel1.setIcon(new ImageIcon(img));
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setText("jLabel1");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 2, 24)); // NOI18N
         jLabel2.setText("REGISTER AS PATIENT");
@@ -104,6 +112,10 @@ jLabel1.setIcon(new ImageIcon(img));
         jLabel7.setForeground(new java.awt.Color(153, 153, 153));
         jLabel7.setText("Select Genger");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Patient", "Doctor" }));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,6 +124,9 @@ jLabel1.setIcon(new ImageIcon(img));
                 .addGap(58, 58, 58)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addComponent(txtname, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,21 +134,25 @@ jLabel1.setIcon(new ImageIcon(img));
                             .addComponent(txtnumper)
                             .addComponent(txtemail)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addComponent(jLabel4)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtage, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(60, 60, 60)
+                                        .addComponent(jLabel5))
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(combgender, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtpass)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(txtname, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtpass)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtage, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(52, 52, 52)
+                                        .addComponent(jLabel4)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(425, 425, 425)
@@ -167,9 +186,12 @@ jLabel1.setIcon(new ImageIcon(img));
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7)
-                                    .addComponent(combgender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(combgender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtnumper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -195,64 +217,106 @@ jLabel1.setIcon(new ImageIcon(img));
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
        String fullName = txtname.getText();
-    String email = txtemail.getText();
-    String phone = txtnumper.getText();
-    String pass = new String(txtpass.getPassword());
-    String gender = combgender.getSelectedItem().toString();
-    int age = Integer.parseInt(txtage.getText());
-    String address = txtaddres.getText();
+String email = txtemail.getText();
+String phone = txtnumper.getText();
+String pass = new String(txtpass.getPassword());
+String gender = combgender.getSelectedItem().toString();
+int age = Integer.parseInt(txtage.getText());
+String address = txtaddres.getText();
+String role = jComboBox1.getSelectedItem().toString(); // "مريض" أو "دكتور"
 
-    String url = "jdbc:mysql://localhost:3306/clinic_system";
-    String user = "root";
-    String dbpass = "1x9ma28w";
+String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+String user = "root";
+String dbpass = "0000";
+    
 
-    if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "يرجى تعبئة جميع الحقول المطلوبة");
+if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "يرجى تعبئة جميع الحقول المطلوبة");
+    return;
+}
+
+try {
+    Connection con = DriverManager.getConnection(url, user, dbpass);
+
+    // التحقق من تكرار البريد أو الهاتف
+  String checkSql = 
+    "SELECT email, phone FROM Patient WHERE email = ? OR phone = ? " +
+    "UNION " +
+    "SELECT email, phone FROM Doctor WHERE email = ? OR phone = ?";
+
+    PreparedStatement checkStmt = con.prepareStatement(checkSql);
+    checkStmt.setString(1, email);
+    checkStmt.setString(2, phone);
+    checkStmt.setString(3, email);
+    checkStmt.setString(4, phone);
+    ResultSet rs = checkStmt.executeQuery();
+
+    if (rs.next()) {
+        JOptionPane.showMessageDialog(this, "البريد الإلكتروني أو رقم الهاتف مستخدم من قبل");
+        con.close();
         return;
     }
 
-    try {
-        Connection con = DriverManager.getConnection(url, user, dbpass);
+    int refId = -1;
 
-        // التحقق من تكرار البريد أو رقم الهاتف
-        String checkSql = "SELECT * FROM patients WHERE email = ? OR phone = ?";
-        PreparedStatement checkStmt = con.prepareStatement(checkSql);
-        checkStmt.setString(1, email);
-        checkStmt.setString(2, phone);
-        ResultSet rs = checkStmt.executeQuery();
-
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(this, "البريد الإلكتروني أو رقم الهاتف مستخدم من قبل");
-            con.close();
-            return;
-        }
-
-        // إدخال بيانات المريض
-        String sql = "INSERT INTO patients (full_name, email, phone, username, password, gender, age, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement pst = con.prepareStatement(sql);
+    if (role.equals("Patient")) {
+        String sql = "INSERT INTO Patient (name, age, gender, email, phone, password, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         pst.setString(1, fullName);
-        pst.setString(2, email);
-        pst.setString(3, phone);
-        pst.setString(4, fullName); // نستخدم الاسم كاسم مستخدم مؤقت (يمكن تغييره لاحقًا)
-        pst.setString(5, pass);
-        pst.setString(6, gender);
-        pst.setInt(7, age);
-        pst.setString(8, address);
+        pst.setInt(2, age);
+        pst.setString(3, gender);
+        pst.setString(4, email);
+        pst.setString(5, phone);
+        pst.setString(6, pass);
+        pst.setString(7, address);
+        pst.executeUpdate();
 
-        int rowsInserted = pst.executeUpdate();
-
-        if (rowsInserted > 0) {
-            JOptionPane.showMessageDialog(this, "تم إنشاء الحساب بنجاح");
-            this.dispose();
-            new LoginForm().setVisible(true);
+        ResultSet generatedKeys = pst.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            refId = generatedKeys.getInt(1);
         }
+    }  else if (role.equals("Doctor")) {
+    int specializationId = jComboBox2.getSelectedIndex() + 1;
 
-        con.close();
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "خطأ في الاتصال بقاعدة البيانات: " + e.getMessage());
-    } catch (NumberFormatException nfe) {
-        JOptionPane.showMessageDialog(this, "يرجى إدخال عمر صحيح");
+    String sql = "INSERT INTO Doctor (name, email, phone, password, specialization_id, address) VALUES (?, ?, ?, ?, ?, ?)";
+    PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+    pst.setString(1, fullName);
+    pst.setString(2, email);
+    pst.setString(3, phone);
+    pst.setString(4, pass);
+    pst.setInt(5, specializationId);
+    pst.setString(6, address);
+    pst.executeUpdate();
+
+    ResultSet generatedKeys = pst.getGeneratedKeys();
+    if (generatedKeys.next()) {
+        refId = generatedKeys.getInt(1);
     }
+}
+
+
+    // إضافة إلى جدول المستخدمين
+    if (refId != -1) {
+        String sqlUser = "INSERT INTO User (username, password, role, ref_id) VALUES (?, ?, ?, ?)";
+        PreparedStatement pstUser = con.prepareStatement(sqlUser);
+        pstUser.setString(1, fullName); // يمكن تغييره لاسم مستخدم خاص
+        pstUser.setString(2, pass);
+        pstUser.setString(3, role.equals("Patient") ? "patient" : "doctor");
+        pstUser.setInt(4, refId);
+        pstUser.executeUpdate();
+    }
+
+    JOptionPane.showMessageDialog(this, "تم إنشاء الحساب بنجاح");
+    con.close();
+    this.dispose();
+    new LoginForm().setVisible(true);
+
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(this, "خطأ في الاتصال بقاعدة البيانات: " + e.getMessage());
+} catch (NumberFormatException nfe) {
+    JOptionPane.showMessageDialog(this, "يرجى إدخال عمر صحيح");
+}
+
     }//GEN-LAST:event_btnsaveActionPerformed
 
     /**
@@ -293,6 +357,8 @@ jLabel1.setIcon(new ImageIcon(img));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnsave;
     private javax.swing.JComboBox<String> combgender;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
