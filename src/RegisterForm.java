@@ -83,6 +83,7 @@ jComboBox2.addItem("'أنف وأذن وحنجرة");
 
         txtage.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Age", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
 
+        combgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Man", "Wemen", }));
         combgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "male", "fmale" }));
 
         txtnumper.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "contact NO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
@@ -226,9 +227,10 @@ String address = txtaddres.getText();
 String role = jComboBox1.getSelectedItem().toString(); // "مريض" أو "دكتور"
 
 
-    String url = "jdbc:mysql://localhost:3306/clinic_system";
-    String user = "root";
-    String dbpass = "1x9ma28w";
+String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+String user = "root";
+String dbpass = "0000";
+    
 
 if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
     JOptionPane.showMessageDialog(this, "يرجى تعبئة جميع الحقول المطلوبة");
