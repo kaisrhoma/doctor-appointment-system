@@ -6,9 +6,10 @@
 
 /**
  *
- * @author am105
+ * @author HP
  */
 public class Session {
-       public static int userID; // تخزين ID المستخدم
-    public static String username; // تخزين اسم المستخدم
+    public static int userID;
+    public static String username;
+    
 }
