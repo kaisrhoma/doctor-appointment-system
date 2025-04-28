@@ -6,10 +6,10 @@
 
 /**
  *
+<<<<<<< HEAD
  * @author HP
  */
 public class Session {
     public static int userID;
     public static String username;
-    
 }
