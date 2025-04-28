@@ -30,7 +30,7 @@ public class RegisterForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         ImageIcon icon;
-        icon = new ImageIcon(getClass().getResource("/images/logd1.png"));
+        icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
 jComboBox2.addItem("باطنية");
@@ -75,19 +75,20 @@ jComboBox2.addItem("'أنف وأذن وحنجرة");
         jLabel2.setFont(new java.awt.Font("Tahoma", 2, 24)); // NOI18N
         jLabel2.setText("REGISTER AS PATIENT");
 
-        txtname.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Full Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        txtname.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Full Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        txtemail.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Your Email", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        txtemail.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Your Email", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        txtpass.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        txtpass.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        txtage.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Age", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        txtage.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Age", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
         combgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Man", "Wemen", }));
+        combgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "male", "fmale" }));
 
-        txtnumper.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "contact NO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        txtnumper.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "contact NO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
-        txtaddres.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Addres", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 153, 153))); // NOI18N
+        txtaddres.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Addres", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(153, 153, 153))); // NOI18N
 
         btnsave.setBackground(java.awt.Color.green);
         btnsave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -228,6 +229,9 @@ String role = jComboBox1.getSelectedItem().toString(); // "مريض" أو "دك�
 String url = "jdbc:mysql://localhost:3306/ClinicSystem";
 String user = "root";
 String dbpass = "0000";
+    String url = "jdbc:mysql://localhost:3306/clinic_system";
+    String user = "root";
+    String dbpass = "1x9ma28w";
 
 if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
     JOptionPane.showMessageDialog(this, "يرجى تعبئة جميع الحقول المطلوبة");

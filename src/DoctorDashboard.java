@@ -1,6 +1,17 @@
 
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,12 +34,19 @@ public class DoctorDashboard extends javax.swing.JFrame {
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
 
+        fillTableFromDatabase();
+                
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
 
     }
 
+    String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+    String user = "root";
+    String password = "1x9ma28w";
+    int doctorId = Session.userID;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -218,6 +236,11 @@ jLabel1.setIcon(new ImageIcon(img));
                 return types [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -280,13 +303,18 @@ jLabel1.setIcon(new ImageIcon(img));
 
         jButton2.setText("OK");
         jButton2.setBackground(new java.awt.Color(0, 204, 204));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel20.setText("no of Patients");
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel21.setForeground(new java.awt.Color(0, 204, 51));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("Data Updated");
+        jLabel21.setForeground(new java.awt.Color(0, 204, 51));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -397,39 +425,49 @@ jLabel1.setIcon(new ImageIcon(img));
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Appointment Information"));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("Id");
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Patient's Name");
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel10.setText("Age");
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("Phone No");
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel12.setText("Gender");
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel13.setText("Appointment Date");
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel14.setText("Time");
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel15.setText("Description");
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButton3.setBackground(new java.awt.Color(0, 204, 204));
         jButton3.setText("Complete");
+        jButton3.setBackground(new java.awt.Color(0, 204, 204));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jButton5.setBackground(new java.awt.Color(0, 204, 204));
         jButton5.setText("Cansel");
+        jButton5.setBackground(new java.awt.Color(0, 204, 204));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -538,21 +576,31 @@ jLabel1.setIcon(new ImageIcon(img));
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Statistics"));
 
-        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel16.setText("Today's reservations :");
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel17.setText("60");
 
-        jButton6.setBackground(new java.awt.Color(0, 204, 204));
         jButton6.setText("Show");
+        jButton6.setBackground(new java.awt.Color(0, 204, 204));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel18.setText("All reservations :");
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel19.setText("60");
 
-        jButton7.setBackground(new java.awt.Color(0, 204, 204));
         jButton7.setText("Show");
+        jButton7.setBackground(new java.awt.Color(0, 204, 204));
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -646,6 +694,41 @@ jLabel1.setIcon(new ImageIcon(img));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void fillTableFromDatabase() {
+    String query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
+                   "p.phone, a.note AS description, p.gender " +
+                   "FROM Appointment a " +
+                   "JOIN Patient p ON a.patient_id = p.patient_id " +
+                   "WHERE doctor_id = ? AND status = 'not completed'"; // بدل الرقم حسب المستخدم
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // Clear old data
+
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, doctorId);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("appointment_id"),
+                rs.getDate("appointment_date"),
+                rs.getTime("appointment_time"),
+                rs.getString("patient_name"),
+                rs.getInt("age"),
+                rs.getString("phone"),
+                rs.getString("description"),
+                rs.getString("gender")
+            };
+            model.addRow(row);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
+    }
+}
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         new PatientDashboard().setVisible(true);
@@ -661,6 +744,168 @@ jLabel1.setIcon(new ImageIcon(img));
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox6ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow != -1) {
+        String id = jTable1.getValueAt(selectedRow, 0).toString();
+        String app_date = jTable1.getValueAt(selectedRow, 1).toString();
+        String time = jTable1.getValueAt(selectedRow, 2).toString();
+        String patientName = jTable1.getValueAt(selectedRow, 3).toString();
+        String age = jTable1.getValueAt(selectedRow, 4).toString();
+        String phoneNO = jTable1.getValueAt(selectedRow, 5).toString();
+        String note = jTable1.getValueAt(selectedRow, 6).toString();
+        String gender = jTable1.getValueAt(selectedRow, 7).toString();
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(app_date, inputFormatter);
+
+        // تنسيق التاريخ إلى التنسيق "MMMM dd, yyyy" مثل "April 25, 2025"
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+        String formattedDate = date.format(outputFormatter);
+        // تعبئة الحقول
+        jTextField1.setText(id);
+        jTextField2.setText(patientName);
+        jTextField3.setText(age);
+        jTextField4.setText(phoneNO);
+        jTextField5.setText(gender);
+        datePicker1.setText(formattedDate);
+        timePicker3.setText(time);
+        jTextArea1.setText(note);
+    }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    int appointmentID = Integer.parseInt(jTextField1.getText());
+
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        String query = "UPDATE appointment SET status = 'completed' WHERE appointment_id = ?"; // بدل الرقم حسب المستخدم
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,appointmentID);
+        stmt.executeUpdate();
+        JOptionPane.showMessageDialog(null, "تم تنفيذ الموعد بنجاح");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "فشل في تحديث البيانات في قاعدة البيانات");
+    }
+    fillTableFromDatabase();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        int appointmentID = Integer.parseInt(jTextField1.getText());
+
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        String query = "UPDATE appointment SET status = 'cansel' WHERE appointment_id = ?"; // بدل الرقم حسب المستخدم
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1,appointmentID);
+        stmt.executeUpdate();
+        JOptionPane.showMessageDialog(null, "تم الغاء الموعد بنجاح");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "فشل في تحديث البيانات في قاعدة البيانات");
+    }
+    fillTableFromDatabase();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        fillTableFromDatabase();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        LocalDate dateToday = LocalDate.now();
+    String query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
+                   "p.phone, a.note AS description, p.gender " +
+                   "FROM Appointment a " +
+                   "JOIN Patient p ON a.patient_id = p.patient_id " +
+                   "WHERE doctor_id = ? AND status = 'not completed' AND a.appointment_date = ?"; // بدل الرقم حسب المستخدم
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // Clear old data
+
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, doctorId);
+        stmt.setDate(2, java.sql.Date.valueOf(dateToday));
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("appointment_id"),
+                rs.getDate("appointment_date"),
+                rs.getTime("appointment_time"),
+                rs.getString("patient_name"),
+                rs.getInt("age"),
+                rs.getString("phone"),
+                rs.getString("description"),
+                rs.getString("gender")
+            };
+            model.addRow(row);
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
+    }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        // عند الضغط على زر "حفظ المواعيد"
+    try {
+    Connection conn = DriverManager.getConnection(url, user, password); // اتصال بقاعدة البيانات
+
+    // ✨ حذف جميع المواعيد القديمة للطبيب
+    String deleteSql = "DELETE FROM AvailableTime WHERE doctor_id = ?";
+    PreparedStatement deletePst = conn.prepareStatement(deleteSql);
+    deletePst.setInt(1, doctorId);
+    deletePst.executeUpdate();
+
+    // تجهيز الأوقات الجديدة
+    LocalTime startTime = timePicker1.getTime();
+    LocalTime endTime = timePicker2.getTime();
+
+    boolean[] daysSelected = {
+        jCheckBox1.isSelected(), // الأحد
+        jCheckBox2.isSelected(), // الاثنين
+        jCheckBox3.isSelected(), // الثلاثاء
+        jCheckBox4.isSelected(), // الأربعاء
+        jCheckBox5.isSelected(), // الخميس
+        jCheckBox6.isSelected(), // الجمعة
+        jCheckBox7.isSelected()  // السبت
+    };
+
+    LocalDate startDate = LocalDate.now();
+    LocalDate endDate = startDate.plusWeeks(4); // لشهر قادم
+
+    for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+        int dayIndex = date.getDayOfWeek().getValue() % 7; // الأحد=0
+        if (daysSelected[dayIndex]) {
+            LocalTime currentTime = startTime;
+            while (!currentTime.isAfter(endTime)) {
+                String sql = "INSERT INTO AvailableTime (doctor_id, available_date, available_time) VALUES (?, ?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1, doctorId);
+                pst.setDate(2, java.sql.Date.valueOf(date));
+                pst.setTime(3, java.sql.Time.valueOf(currentTime));
+                pst.executeUpdate();
+
+                currentTime = currentTime.plusMinutes(30); // كل نصف ساعة
+            }
+        }
+    }
+
+    JOptionPane.showMessageDialog(this, "تم حفظ الأوقات المتاحة بنجاح!");
+    conn.close();
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, "خطأ أثناء حفظ الأوقات: " + e.getMessage());
+}
+
+
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
