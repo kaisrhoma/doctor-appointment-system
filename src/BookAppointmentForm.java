@@ -1,4 +1,8 @@
 
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import com.github.lgooddatepicker.components.TimePickerSettings;
+import com.github.lgooddatepicker.optionalusertools.DateVetoPolicy;
+import com.github.lgooddatepicker.optionalusertools.TimeVetoPolicy;
 import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,6 +42,9 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
+        
+        listener();
+
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
@@ -44,6 +53,7 @@ jLabel1.setIcon(new ImageIcon(img));
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "1x9ma28w";
+    int patien_id = Session.userID;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,6 +86,7 @@ jLabel1.setIcon(new ImageIcon(img));
         jTextArea1 = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -197,7 +208,7 @@ jLabel1.setIcon(new ImageIcon(img));
         jLabel9.setText("Specialization");
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "عظام", "مفاصل", "جراحة", "قواده" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "عظام", "مفاصل" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -206,6 +217,12 @@ jLabel1.setIcon(new ImageIcon(img));
 
         jLabel10.setText("Doctor's Name");
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("Available Date");
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -230,36 +247,48 @@ jLabel1.setIcon(new ImageIcon(img));
             }
         });
 
+        jButton8.setBackground(new java.awt.Color(0, 204, 204));
+        jButton8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton8.setText("OIK");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel11))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(391, 391, 391)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel11))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel12))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(timePicker1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton8)
+                            .addComponent(jLabel13))))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel12))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(timePicker1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(43, 43, 43)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(391, 391, 391)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,18 +300,23 @@ jLabel1.setIcon(new ImageIcon(img));
                             .addComponent(jLabel9)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel13))
+                            .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)
-                            .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addComponent(jButton5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11)
+                                    .addComponent(timePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel13))
+                                .addGap(24, 24, 24)
+                                .addComponent(jButton5))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(15, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jButton8)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -381,22 +415,27 @@ jLabel1.setIcon(new ImageIcon(img));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Appointment Management");
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        jButton6.setText("Edit");
         jButton6.setBackground(new java.awt.Color(0, 204, 204));
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton6.setText("Edit");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
+        jButton7.setText("Cansel");
         jButton7.setBackground(new java.awt.Color(0, 204, 204));
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton7.setText("Cansel");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -457,7 +496,14 @@ jLabel1.setIcon(new ImageIcon(img));
         pack();
     }// </editor-fold>//GEN-END:initComponents
  
-    
+    public void listener(){
+        datePicker1.addDateChangeListener(dateChangeEvent -> {
+    if (datePicker1.getDate() != null && jComboBox3.getSelectedItem() != null) {
+        int d_id = getDoctorId(jComboBox3.getSelectedItem().toString());
+        loadAvailableTimesForDate(d_id, datePicker1.getDate());
+    }
+});
+    }
     public int getDoctorId(String doc_Name){
       try(Connection co = DriverManager.getConnection(url,user,password)){
       String q = "SELECT doctor_id FROM doctor WHERE name = ?";
@@ -473,30 +519,117 @@ jLabel1.setIcon(new ImageIcon(img));
       return 1;
     }
     
-    public void special(String sp){
-    try(Connection co = DriverManager.getConnection(url,user,password)){
-      String q = "SELECT d.name AS doctor_name FROM doctor d JOIN specialization s ON d.specialization_id = s.specialization_id" +
-              " WHERE s.name = ?";
-      PreparedStatement pst = co.prepareStatement(q);
-      pst.setString(1, sp);
-      ResultSet rs = pst.executeQuery();
-      while(rs.next()){
-          jComboBox3.addItem(rs.getString("doctor_name"));
-      }
-    } catch(SQLException ex){
-        JOptionPane.showMessageDialog(null,"There is an error" + ex.toString());
+    public void special(String sp) {
+    if (sp == null || sp.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Please select a specialization.");
+        return;
     }
+
+    // إفراغ combobox 3 قبل إضافة الأطباء الجدد
+    jComboBox3.removeAllItems(); 
+
+    try (Connection co = DriverManager.getConnection(url, user, password);
+         PreparedStatement pst = co.prepareStatement("SELECT d.name AS doctor_name FROM doctor d " + 
+                 " JOIN specialization s ON d.specialization_id = s.specialization_id WHERE s.name = ?")) {
+        
+        pst.setString(1, sp);
+        try (ResultSet rs = pst.executeQuery()) {
+            boolean doctorsFound = false;
+            while (rs.next()) {
+                String doctorName = rs.getString("doctor_name");
+                jComboBox3.addItem(doctorName);
+                doctorsFound = true;
+            }
+            if (!doctorsFound) {
+                JOptionPane.showMessageDialog(null, "No doctors found for the selected specialization.");
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "There is an error: " + ex.toString());
+    }
+}
+
+
+
     
+    private void loadAvailableTimesForDate(int selectedDoctorId, LocalDate selectedDate) {
+    try {
+        Connection conn = DriverManager.getConnection(url, user, password);
+
+        String sql = "SELECT available_time FROM AvailableTime WHERE doctor_id = ? AND available_date = ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, selectedDoctorId);
+        pst.setDate(2, java.sql.Date.valueOf(selectedDate));
+        ResultSet rs = pst.executeQuery();
+
+        ArrayList<LocalTime> availableTimes = new ArrayList<>();
+        while (rs.next()) {
+            availableTimes.add(rs.getTime("available_time").toLocalTime());
+        }
+
+        System.out.println("الأوقات المتاحة: " + availableTimes); // طباعة الأوقات المتاحة
+
+        // فلترة الأوقات المتاحة في timePicker
+        TimePickerSettings timeSettings = timePicker1.getSettings();
+        timeSettings.setVetoPolicy(new TimeVetoPolicy() {
+            @Override
+            public boolean isTimeAllowed(LocalTime time) {
+                boolean isAllowed = availableTimes.contains(time);
+                return isAllowed;
+            }
+        });
+
+        conn.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "خطأ أثناء تحميل الأوقات المتاحة: " + e.getMessage());
     }
+}
+
+
+    private void loadAvailableDates(int selectedDoctorId) {
+    try {
+        Connection conn = DriverManager.getConnection(url,user,password);
+        
+        String sql = "SELECT DISTINCT available_date FROM AvailableTime WHERE doctor_id = ? AND available_date >= CURDATE()";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, selectedDoctorId);
+        ResultSet rs = pst.executeQuery();
+        
+        ArrayList<LocalDate> availableDates = new ArrayList<>();
+        while (rs.next()) {
+            availableDates.add(rs.getDate("available_date").toLocalDate());
+        }
+
+        // نحدد الفلترة على DatePicker مباشرة
+        DatePickerSettings settings = datePicker1.getSettings();
+        settings.setVetoPolicy(new DateVetoPolicy() {
+        @Override
+        public boolean isDateAllowed(LocalDate date) {
+        return availableDates.contains(date);
+        }
+        });
+
+        
+        conn.close();
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "خطأ أثناء تحميل التواريخ المتاحة: " + e.getMessage());
+    }
+}
+
+
     
     public void insertAppointment() {
-        Integer patiendid = 1;
+        
     try (Connection con = DriverManager.getConnection(url, user, password)) {
         Integer did = getDoctorId(jComboBox3.getSelectedItem().toString());
         String q2 = "INSERT INTO Appointment (patient_id, doctor_id, appointment_date, appointment_time, status, note) " +
             "VALUES (?, ?, STR_TO_DATE(?, '%M %d, %Y'), STR_TO_DATE(?, '%l:%i%p'), ?, ?)";
         PreparedStatement pst = con.prepareStatement(q2);
-        pst.setInt(1, patiendid);
+        pst.setInt(1, patien_id);
         pst.setInt(2, did);
         pst.setString(3, datePicker1.getText());
         pst.setString(4, timePicker1.getText());
@@ -513,13 +646,13 @@ jLabel1.setIcon(new ImageIcon(img));
 }
 
     public void updateAppointment() {
-        Integer patiendid = 1;
+        
     try (Connection con = DriverManager.getConnection(url, user, password)) {
         Integer did = getDoctorId(jComboBox3.getSelectedItem().toString());
         String q = "UPDATE Appointment SET patient_id = ?, doctor_id = ?, appointment_date = STR_TO_DATE(?, '%M %d, %Y')," + 
                 " appointment_time = STR_TO_DATE(?, '%l:%i%p'), status = ?, note = ? WHERE appointment_id = ?";
         PreparedStatement pst = con.prepareStatement(q);
-        pst.setInt(1, patiendid);
+        pst.setInt(1, patien_id);
         pst.setInt(2, did);
         pst.setString(3, datePicker1.getText());
         pst.setString(4, timePicker1.getText());
@@ -548,7 +681,7 @@ jLabel1.setIcon(new ImageIcon(img));
                    "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
                    "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
                    "JOIN Patient p ON a.patient_id = p.patient_id " +
-                   "WHERE a.patient_id = 1"; // بدل الرقم حسب المستخدم
+                   "WHERE a.patient_id = 1 AND a.status = 'not completed'"; // بدل الرقم حسب المستخدم
 
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0); // Clear old data
@@ -574,7 +707,6 @@ jLabel1.setIcon(new ImageIcon(img));
         }
 
     } catch (SQLException e) {
-        e.printStackTrace();
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
 }
@@ -615,9 +747,15 @@ jLabel1.setIcon(new ImageIcon(img));
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        String sp = jComboBox1.getSelectedItem().toString();
-        jComboBox3.removeAllItems();
-        special(sp);
+        if (jComboBox3 == null) {
+        System.out.println("jComboBox3 is null");
+        return;
+    }
+    String selectedSpecialization = jComboBox1.getSelectedItem().toString();
+    if (selectedSpecialization != null) {
+        special(selectedSpecialization);
+    }
+
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -651,6 +789,37 @@ jLabel1.setIcon(new ImageIcon(img));
         updateAppointment();
         fillTableFromDatabase();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    try (Connection con = DriverManager.getConnection(url, user, password)) {
+        String q = "UPDATE appointment SET status = 'cansel' WHERE appointment_id = ?";
+        PreparedStatement pst = con.prepareStatement(q);
+        int tablerow = jTable1.getSelectedRow();
+        int v = -1;
+        if(tablerow != -1){
+        v = Integer.parseInt(jTable1.getValueAt(tablerow, 0).toString());
+        }
+        pst.setInt(1,v );
+        pst.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "تم الغاء الموعد بنجاح");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "فشل في تحديث البيانات في قاعدة البيانات" + e.toString());
+    }
+    fillTableFromDatabase();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        int d_id = getDoctorId(jComboBox3.getSelectedItem().toString());
+        loadAvailableDates(d_id);
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -696,6 +865,7 @@ jLabel1.setIcon(new ImageIcon(img));
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
