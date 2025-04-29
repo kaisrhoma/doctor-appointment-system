@@ -206,6 +206,7 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;male&quot;, &quot;fmale&quot; })" type="code"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Male&#xa;Female"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
