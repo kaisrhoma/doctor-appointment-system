@@ -39,7 +39,6 @@ jComboBox2.addItem("جلدية");
 jComboBox2.addItem("أسنان");
 jComboBox2.addItem("'أنف وأذن وحنجرة");
 // ... وهكذا
-
     }
 
     /**
