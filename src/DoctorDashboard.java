@@ -33,18 +33,18 @@ public class DoctorDashboard extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
-
-        fillTableFromDatabase();
-                
+        jLabel3.setText(Session.username);
+        jLabel2.setText("Hellow " + Session.username + " Check your Appointments");
+        fillTableFromDatabase();      
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
-Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
-jLabel1.setIcon(new ImageIcon(img));
-
+        Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
+        jLabel1.setIcon(new ImageIcon(img));
     }
 
+    //نصوص الاتصال بقاعدة البيانات
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
-    String password = "1x9ma28w";
+    String password = "0000";
     int doctorId = Session.userID;
     
     /**
@@ -689,6 +689,9 @@ jLabel1.setIcon(new ImageIcon(img));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    //جلت البيانات من قاعده البيانات
     public void fillTableFromDatabase() {
     String query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
                    "p.phone, a.note AS description, p.gender " +
@@ -726,20 +729,18 @@ jLabel1.setIcon(new ImageIcon(img));
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new PatientDashboard().setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        new LoginForm().setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
+    
+    //ربط بيانات الجدول ب الحقول 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int selectedRow = jTable1.getSelectedRow();
@@ -771,6 +772,7 @@ jLabel1.setIcon(new ImageIcon(img));
     }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    //تحديث بيانات حجز الموعد
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     int appointmentID = Integer.parseInt(jTextField1.getText());
@@ -787,6 +789,8 @@ jLabel1.setIcon(new ImageIcon(img));
     fillTableFromDatabase();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    
+    //الغاء موعد وتغيير حالته الى ملغي
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         int appointmentID = Integer.parseInt(jTextField1.getText());
@@ -803,11 +807,15 @@ jLabel1.setIcon(new ImageIcon(img));
     fillTableFromDatabase();
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    
+    //تحجيث عرض المواعيج من تاريخ اليوم الى اخر موعد محجوز
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         fillTableFromDatabase();
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    
+    //جلب المواعيد فقط اللتي بتاريخ اليوم
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         LocalDate dateToday = LocalDate.now();
@@ -845,6 +853,8 @@ jLabel1.setIcon(new ImageIcon(img));
     }
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    
+    //لتحديد وتحديث المواعيد المتاجة
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         // عند الضغط على زر "حفظ المواعيد"

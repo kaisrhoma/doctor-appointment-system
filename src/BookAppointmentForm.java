@@ -42,7 +42,8 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setSize(1250, 725);
         this.setResizable(false); // يمنع المستخدم من تغيير الحجم
-        
+        jLabel3.setText(Session.username);
+        jLabel2.setText("Hellow " + Session.username + " Do you Want Book an Appointment");
         listener();
 
 
@@ -52,8 +53,8 @@ jLabel1.setIcon(new ImageIcon(img));
     }
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
-    String password = "1x9ma28w";
-    int patien_id = Session.userID;
+    String password = "0000";
+    int patien_id = 3;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -155,7 +156,6 @@ jLabel1.setIcon(new ImageIcon(img));
         });
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("UserName Here");
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -341,17 +341,17 @@ jLabel1.setIcon(new ImageIcon(img));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setText("Hellow UserName Here! Do you Want Book Appointment");
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(242, 242, 242)
-                .addComponent(jLabel2)
-                .addContainerGap(278, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(185, 185, 185))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -679,15 +679,16 @@ jLabel1.setIcon(new ImageIcon(img));
                    "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
                    "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
                    "JOIN Patient p ON a.patient_id = p.patient_id " +
-                   "WHERE a.patient_id = 1 AND a.status = 'not completed'"; // بدل الرقم حسب المستخدم
+                   "WHERE a.patient_id = ? AND a.status = 'not completed'"; // بدل الرقم حسب المستخدم
 
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0); // Clear old data
 
-    try (Connection conn = DriverManager.getConnection(url, user, password);
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
 
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, patien_id);
+         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             Object[] row = {
                 rs.getInt("appointment_id"),
