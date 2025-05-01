@@ -37,7 +37,7 @@ public class PatientDashboard extends javax.swing.JFrame {
                    "FROM Appointment a " +
                    "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
                    "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
-                   "WHERE a.patient_id = ? AND a.status != 'Completed'"; // استخدم الـ ID للمريض في الاستعلام
+                   "WHERE a.patient_id = ? AND a.status = 'not completed'"; // استخدم الـ ID للمريض في الاستعلام
 
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     model.setRowCount(0); // Clear old data
