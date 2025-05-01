@@ -31,14 +31,15 @@ public class RegisterForm extends javax.swing.JFrame {
         
         ImageIcon icon;
         icon = new ImageIcon(getClass().getResource("/images/d2.png"));
-Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
-jLabel1.setIcon(new ImageIcon(img));
-jComboBox2.addItem("باطنية");
-jComboBox2.addItem("أطفال");
-jComboBox2.addItem("جلدية");
-jComboBox2.addItem("أسنان");
-jComboBox2.addItem("'أنف وأذن وحنجرة");
-// ... وهكذا
+        Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
+        jLabel1.setIcon(new ImageIcon(img));
+        jComboBox2.addItem("عظام");
+        jComboBox2.addItem("مفاصل");
+        jComboBox2.addItem("باطنية");
+        jComboBox2.addItem("أطفال");
+        jComboBox2.addItem("جلدية");
+        jComboBox2.addItem("أسنان");
+        jComboBox2.addItem("أنف وأذن وحنجرة");
     }
 
     /**

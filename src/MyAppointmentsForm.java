@@ -353,7 +353,8 @@ jLabel1.setIcon(new ImageIcon(img));
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        new LoginForm().setVisible(true);
+        LoginForm logpage = new LoginForm();
+        logpage.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 

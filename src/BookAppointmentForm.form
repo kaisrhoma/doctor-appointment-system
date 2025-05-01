@@ -377,9 +377,14 @@
             <Component class="javax.swing.JComboBox" name="jComboBox1">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
+                  <StringArray count="7">
                     <StringItem index="0" value="&#x639;&#x638;&#x627;&#x645;"/>
                     <StringItem index="1" value="&#x645;&#x641;&#x627;&#x635;&#x644;"/>
+                    <StringItem index="2" value="&#x628;&#x627;&#x637;&#x646;&#x64a;&#x629;"/>
+                    <StringItem index="3" value="&#x623;&#x637;&#x641;&#x627;&#x644;"/>
+                    <StringItem index="4" value="&#x62c;&#x644;&#x62f;&#x64a;&#x629;"/>
+                    <StringItem index="5" value="&#x623;&#x633;&#x646;&#x627;&#x646;"/>
+                    <StringItem index="6" value="&#x623;&#x646;&#x641; &#x648;&#x623;&#x630;&#x646; &#x648;&#x62d;&#x646;&#x62c;&#x631;&#x629;"/>
                   </StringArray>
                 </Property>
               </Properties>

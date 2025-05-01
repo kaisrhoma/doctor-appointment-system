@@ -45,11 +45,6 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         jLabel3.setText(Session.username);
         jLabel2.setText("Hellow " + Session.username + " Do you Want Book an Appointment");
         listener();
-jComboBox1.addItem("باطنية");
-jComboBox1.addItem("أطفال");
-jComboBox1.addItem("جلدية");
-jComboBox1.addItem("أسنان");
-jComboBox1.addItem("'أنف وأذن وحنجرة");
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
@@ -212,7 +207,7 @@ jLabel1.setIcon(new ImageIcon(img));
         jLabel9.setText("Specialization");
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "عظام", "مفاصل" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "عظام", "مفاصل", "باطنية", "أطفال", "جلدية", "أسنان", "أنف وأذن وحنجرة" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -738,7 +733,8 @@ jLabel1.setIcon(new ImageIcon(img));
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        new LoginForm().setVisible(true);
+        LoginForm logpage = new LoginForm();
+        logpage.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
