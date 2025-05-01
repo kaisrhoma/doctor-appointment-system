@@ -25,18 +25,19 @@ public class PatientDashboard extends javax.swing.JFrame {
     PatientDashboard(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-// عرض بياتات الجدول  وايم المستخدم
- public void fillTableFromDatabase() {
-    String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
+// عرض بياتات الجدول  وايم المستخدم
+ public void fillTableFromDatabase() {
+  
 
     String query = "SELECT a.appointment_id, d.name AS doctor_name, s.name AS specialization, " +
                    "a.appointment_date, a.appointment_time, a.status " +
                    "FROM Appointment a " +
                    "JOIN Doctor d ON a.doctor_id = d.doctor_id " +
                    "JOIN Specialization s ON d.specialization_id = s.specialization_id " +
-                   "WHERE a.patient_id = ?"; // استخدم الـ ID للمريض في الاستعلام
+                   "WHERE a.patient_id = ? AND a.status != 'Completed'"; // استخدم الـ ID للمريض في الاستعلام
 
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     model.setRowCount(0); // Clear old data
@@ -69,9 +70,7 @@ public class PatientDashboard extends javax.swing.JFrame {
 }
  //عدد المرضى
 public void countTodayAppointments() {
-    String url = "jdbc:mysql://localhost:3306/ClinicSystem";
-    String user = "root";
-    String password = "0000";
+  
 
     String query = "SELECT COUNT(*) AS total FROM appointment " +
                    "WHERE patient_id = ? AND appointment_date = CURDATE()";

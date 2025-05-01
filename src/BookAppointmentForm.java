@@ -45,7 +45,11 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         jLabel3.setText(Session.username);
         jLabel2.setText("Hellow " + Session.username + " Do you Want Book an Appointment");
         listener();
-
+jComboBox1.addItem("باطنية");
+jComboBox1.addItem("أطفال");
+jComboBox1.addItem("جلدية");
+jComboBox1.addItem("أسنان");
+jComboBox1.addItem("'أنف وأذن وحنجرة");
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
