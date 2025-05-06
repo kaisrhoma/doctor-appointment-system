@@ -56,6 +56,11 @@ jLabel1.setIcon(new ImageIcon(img));
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setSize(new java.awt.Dimension(0, 0));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         txtuser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtuser.addActionListener(new java.awt.event.ActionListener() {
@@ -253,6 +258,16 @@ Session.username = rs.getString("username"); // الحصول على اسم ال�
     private void txtuserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtuserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtuserActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        Integer s = JOptionPane.showConfirmDialog(null,"Are you sure Do you want close the system","Close System",0,3);
+        if(s != 0){
+            this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        } else {
+            this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

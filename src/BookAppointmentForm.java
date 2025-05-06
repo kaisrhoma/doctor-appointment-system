@@ -99,6 +99,11 @@ jLabel1.setIcon(new ImageIcon(img));
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1250, 725));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -733,9 +738,14 @@ jLabel1.setIcon(new ImageIcon(img));
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        LoginForm logpage = new LoginForm();
+        Integer s = JOptionPane.showConfirmDialog(null,"Are you sure you want to log out? ","Log Out",0,3);
+        if(s != 0){
+            this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        } else {
+            LoginForm logpage = new LoginForm();
         logpage.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -819,6 +829,16 @@ jLabel1.setIcon(new ImageIcon(img));
         int d_id = getDoctorId(jComboBox3.getSelectedItem().toString());
         loadAvailableDates(d_id);
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        Integer s = JOptionPane.showConfirmDialog(null,"Are you sure Do you want close the system","Close System",0,3);
+        if(s != 0){
+            this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        } else {
+            this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
