@@ -9,4 +9,6 @@
 public class Session {
     public static int userID;
     public static String username;
+     public static int refId;
+      public static String role;
 }

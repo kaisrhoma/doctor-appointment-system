@@ -1,5 +1,12 @@
 
+
+
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -29,6 +36,9 @@ public class MyAppointmentsForm extends javax.swing.JFrame {
 Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
 jLabel1.setIcon(new ImageIcon(img));
     }
+      String url = "jdbc:mysql://localhost:3306/ClinicSystem";
+    String user = "root";
+    String passwordd = "0000";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,6 +213,11 @@ jLabel1.setIcon(new ImageIcon(img));
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Update");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel11.setText("Address");
@@ -271,6 +286,11 @@ jLabel1.setIcon(new ImageIcon(img));
         jButton5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Update");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -369,6 +389,11 @@ jLabel1.setIcon(new ImageIcon(img));
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setText("Delete Accunt");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -460,6 +485,154 @@ jLabel1.setIcon(new ImageIcon(img));
             this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+ try (Connection con = DriverManager.getConnection(url, user, passwordd)) {
+
+        int refId = Session.refId;
+        String role = Session.role;
+
+        if (role.equals("patient")) {
+            // حذف مواعيد المريض
+            String deleteAppointments = "DELETE FROM Appointment WHERE patient_id = ?";
+            PreparedStatement pst1 = con.prepareStatement(deleteAppointments);
+            pst1.setInt(1, refId);
+            pst1.executeUpdate();
+
+            // حذف من جدول المرضى
+            String deletePatient = "DELETE FROM Patient WHERE patient_id = ?";
+            PreparedStatement pst2 = con.prepareStatement(deletePatient);
+            pst2.setInt(1, refId);
+            pst2.executeUpdate();
+
+            // حذف من جدول المستخدمين
+            String deleteUser = "DELETE FROM User WHERE ref_id = ?";
+            PreparedStatement pst3 = con.prepareStatement(deleteUser);
+            pst3.setInt(1, refId);
+            pst3.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "تم حذف بيانات المريض من جميع الجداول.");
+        }
+
+        else if (role.equals("doctor")) {
+            // حذف المواعيد المرتبطة بالطبيب
+            String deleteAppointments = "DELETE FROM Appointment WHERE doctor_id = ?";
+            PreparedStatement pst1 = con.prepareStatement(deleteAppointments);
+            pst1.setInt(1, refId);
+            pst1.executeUpdate();
+
+            // حذف أوقات التوفر للطبيب
+            String deleteAvailableTime = "DELETE FROM AvailableTime WHERE doctor_id = ?";
+            PreparedStatement pst2 = con.prepareStatement(deleteAvailableTime);
+            pst2.setInt(1, refId);
+            pst2.executeUpdate();
+
+            // حذف من جدول الأطباء
+            String deleteDoctor = "DELETE FROM Doctor WHERE doctor_id = ?";
+            PreparedStatement pst3 = con.prepareStatement(deleteDoctor);
+            pst3.setInt(1, refId);
+            pst3.executeUpdate();
+
+            // حذف من جدول المستخدمين
+            String deleteUser = "DELETE FROM User WHERE ref_id = ?";
+            PreparedStatement pst4 = con.prepareStatement(deleteUser);
+            pst4.setInt(1, refId);
+            pst4.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "تم حذف بيانات الطبيب من جميع الجداول.");
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "خطأ في الحذف:\n" + e.toString());
+    }    
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+try (Connection con = DriverManager.getConnection(url, user, passwordd)) {
+
+        // افترض أن هذه المتغيرات تم تعيينها مسبقًا في الجلسة
+        int refId = Session.refId;  // هذا سيكون patient_id أو doctor_id
+        String role = Session.role;
+
+        // الحصول على البيانات من حقول النص
+        String username = jTextField2.getText();  // اليوزر نيم
+        String email = jTextField4.getText();     // الإيميل
+        String password = jTextField3.getText();  // الباسورد
+
+        // إعداد الاستعلام المشترك لتحديث جدول اليوزر
+        String updateUserQuery = "UPDATE User SET username = ?, password = ? WHERE ref_id = ?";
+
+        // تحديث جدول اليوزر
+        PreparedStatement pstUser = con.prepareStatement(updateUserQuery);
+        pstUser.setString(1, username);
+        pstUser.setString(2, password);
+        pstUser.setInt(3, refId);  // استخدام refId هنا
+        pstUser.executeUpdate();
+
+        // تحديد الاستعلام بناءً على الدور
+        if (role.equals("patient")) {
+            // إذا كان الدور مريضًا، نقوم بتحديث جدول المرضى
+            String updatePatientQuery = "UPDATE Patient SET name = ?, password = ?, email = ? WHERE patient_id = ?";
+            PreparedStatement pstPatient = con.prepareStatement(updatePatientQuery);
+            pstPatient.setString(1, username);  // تحديث النيم
+            pstPatient.setString(2, password);  // تحديث الباسورد
+            pstPatient.setString(3, email);     // تحديث الإيميل
+            pstPatient.setInt(4, refId);        // استخدام patient_id (refId)
+            pstPatient.executeUpdate();
+            JOptionPane.showMessageDialog(null, "تم تحديث بيانات المريض بنجاح");
+        } else if (role.equals("doctor")) {
+            // إذا كان الدور طبيبًا، نقوم بتحديث جدول الأطباء
+            String updateDoctorQuery = "UPDATE Doctor SET name = ?, password = ?, email = ? WHERE doctor_id = ?";
+            PreparedStatement pstDoctor = con.prepareStatement(updateDoctorQuery);
+            pstDoctor.setString(1, username);  // تحديث النيم
+            pstDoctor.setString(2, password);  // تحديث الباسورد
+            pstDoctor.setString(3, email);     // تحديث الإيميل
+            pstDoctor.setInt(4, refId);        // استخدام doctor_id (refId)
+            pstDoctor.executeUpdate();
+            JOptionPane.showMessageDialog(null, "تم تحديث بيانات الطبيب بنجاح");
+        }
+
+    } catch (SQLException e) {
+        // في حال حدوث خطأ في قاعدة البيانات
+        JOptionPane.showMessageDialog(null, "خطأ في تحديث البيانات:\n" + e.toString());
+    } catch (Exception e) {
+        // في حال حدوث خطأ آخر
+        JOptionPane.showMessageDialog(null, "حدث خطأ أثناء عملية التحديث:\n" + e.toString());
+    }
+    
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+         try (Connection con = DriverManager.getConnection(url, user, passwordd)) {
+
+        int refId = Session.refId;
+        String role = Session.role;
+
+        String address = jTextField1.getText(); // العنوان
+        int age = Integer.parseInt(jTextField6.getText()); // العمر
+        String contact = jTextField5.getText(); // رقم التواصل
+
+        String q = role.equals("patient") ?
+            "UPDATE Patient SET address = ?, age = ?, phone = ? WHERE patient_id = ?" :
+            "UPDATE Doctor SET address = ?, age = ?, phone = ? WHERE doctor_id = ?";
+
+        PreparedStatement pst = con.prepareStatement(q);
+        pst.setString(1, address);
+        pst.setInt(2, age);
+        pst.setString(3, contact);
+        pst.setInt(4, refId);
+
+        pst.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "تم تحديث البيانات الشخصية بنجاح");
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "خطأ في تحديث البيانات:\n" + e.toString());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "يرجى إدخال عمر صحيح");
+    }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

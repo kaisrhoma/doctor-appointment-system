@@ -212,7 +212,7 @@ String dbpass = "0000";
 try {
     Connection con = DriverManager.getConnection(url, dbuser, dbpass);
 
-    String sql = "SELECT * FROM User WHERE username=? AND password=? AND role= ?";
+    String sql = "SELECT user_id, username, password, role, ref_id FROM User WHERE username = ? AND password = ? AND role = ?";
     PreparedStatement pst = con.prepareStatement(sql);
     pst.setString(1, usernameInput);
     pst.setString(2, passwordInput);
@@ -222,10 +222,13 @@ try {
 
     if (rs.next()) {
         JOptionPane.showMessageDialog(null, "You have Successfully logged in","Success",3);
-Session.userID = rs.getInt("ref_id"); // هنا يتم الحصول على الـ ID من قاعدة البيانات
+Session.userID = rs.getInt("user_id"); // هنا يتم الحصول على الـ ID من قاعدة البيانات
 Session.username = rs.getString("username"); // الحصول على اسم المستخدم
+Session.refId = rs.getInt("ref_id");
+Session.role = rs.getString("role");
+       
         // فتح واجهة المريض مباشرة
-        if(jComboBox1.getSelectedItem().toString() == "Patient"){
+        if(jComboBox1.getSelectedItem().toString().equals("Patient") ){
             PatientDashboard dashboard = new PatientDashboard(); 
             dashboard.setVisible(true);
             this.dispose();
