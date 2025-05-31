@@ -45,7 +45,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
-    int doctorId = Session.userID;
+    int doctorId = Session.refId;
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,7 +62,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
@@ -109,10 +108,10 @@ public class DoctorDashboard extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
+        todayapp = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
+        allapp = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
@@ -162,22 +161,8 @@ public class DoctorDashboard extends javax.swing.JFrame {
         });
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("UserName Here");
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-
-        jButton8.setText("Edite Information");
-        jButton8.setBackground(new java.awt.Color(0, 204, 204));
-        jButton8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 228, 228), 1, true));
-        jButton8.setContentAreaFilled(false);
-        jButton8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton8.setForeground(java.awt.Color.white);
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -196,11 +181,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,11 +194,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 313, Short.MAX_VALUE)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(335, 335, 335)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(336, Short.MAX_VALUE)))
         );
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
@@ -300,24 +275,24 @@ public class DoctorDashboard extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Available Date"));
 
-        jCheckBox1.setText("Sat");
+        jCheckBox1.setText("Sun");
 
-        jCheckBox2.setText("Sun");
+        jCheckBox2.setText("Mon");
 
-        jCheckBox3.setText("Mon");
+        jCheckBox3.setText("Tue");
 
-        jCheckBox4.setText("Tue");
+        jCheckBox4.setText("Wed");
 
-        jCheckBox5.setText("Wed");
+        jCheckBox5.setText("Thu");
 
-        jCheckBox6.setText("Thu");
+        jCheckBox6.setText("Fri");
         jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox6ActionPerformed(evt);
             }
         });
 
-        jCheckBox7.setText("Fri");
+        jCheckBox7.setText("Sat");
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Days");
@@ -603,7 +578,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
         jLabel16.setText("Today's reservations :");
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel17.setText("60");
+        todayapp.setText("60");
 
         jButton6.setText("Show");
         jButton6.setBackground(new java.awt.Color(0, 204, 204));
@@ -616,7 +591,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
         jLabel18.setText("All reservations :");
         jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel19.setText("60");
+        allapp.setText("60");
 
         jButton7.setText("Show");
         jButton7.setBackground(new java.awt.Color(0, 204, 204));
@@ -641,8 +616,8 @@ public class DoctorDashboard extends javax.swing.JFrame {
                     .addComponent(jLabel18))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel17))
+                    .addComponent(allapp)
+                    .addComponent(todayapp))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -651,13 +626,13 @@ public class DoctorDashboard extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jLabel17))
+                    .addComponent(todayapp))
                 .addGap(18, 18, 18)
                 .addComponent(jButton7)
                 .addGap(40, 40, 40)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
-                    .addComponent(jLabel19))
+                    .addComponent(allapp))
                 .addGap(18, 18, 18)
                 .addComponent(jButton6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -722,6 +697,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     
     //جلت البيانات من قاعده البيانات
     public void fillTableFromDatabase() {
+        int count = 0;
     String query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
                    "p.phone, a.note AS description, p.gender " +
                    "FROM Appointment a " +
@@ -737,6 +713,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
         stmt.setInt(1, doctorId);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
+            count++;
             Object[] row = {
                 rs.getInt("appointment_id"),
                 rs.getDate("appointment_date"),
@@ -749,7 +726,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
             };
             model.addRow(row);
         }
-
+        allapp.setText("" + count);
     } catch (SQLException e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
@@ -855,6 +832,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     //جلب المواعيد فقط اللتي بتاريخ اليوم
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        int count = 0;
         LocalDate dateToday = LocalDate.now();
     String query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
                    "p.phone, a.note AS description, p.gender " +
@@ -872,6 +850,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
         stmt.setDate(2, java.sql.Date.valueOf(dateToday));
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
+            count++;
             Object[] row = {
                 rs.getInt("appointment_id"),
                 rs.getDate("appointment_date"),
@@ -884,7 +863,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
             };
             model.addRow(row);
         }
-
+        todayapp.setText("" + count);
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
@@ -959,12 +938,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-        new MyAppointmentsForm().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton8ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -1001,6 +974,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel allapp;
     private com.github.lgooddatepicker.components.DatePicker datePicker1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -1009,7 +983,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -1025,9 +998,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -1059,5 +1030,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
     private com.github.lgooddatepicker.components.TimePicker timePicker1;
     private com.github.lgooddatepicker.components.TimePicker timePicker2;
     private com.github.lgooddatepicker.components.TimePicker timePicker3;
+    private javax.swing.JLabel todayapp;
     // End of variables declaration//GEN-END:variables
 }

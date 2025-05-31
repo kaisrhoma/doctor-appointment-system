@@ -53,7 +53,7 @@ jLabel1.setIcon(new ImageIcon(img));
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
-    int patien_id = 3;
+    int patien_id = Session.refId;
 
     /**
      * This method is called from within the constructor to initialize the form.
