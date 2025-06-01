@@ -87,6 +87,9 @@ jLabel1.setIcon(new ImageIcon(img));
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
         });
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
@@ -550,55 +553,58 @@ jLabel1.setIcon(new ImageIcon(img));
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 try (Connection con = DriverManager.getConnection(url, user, passwordd)) {
 
-        // افترض أن هذه المتغيرات تم تعيينها مسبقًا في الجلسة
-        int refId = Session.refId;  // هذا سيكون patient_id أو doctor_id
-        String role = Session.role;
+    int refId = Session.refId;  
+    String role = Session.role;
 
-        // الحصول على البيانات من حقول النص
-        String username = jTextField2.getText();  // اليوزر نيم
-        String email = jTextField4.getText();     // الإيميل
-        String password = jTextField3.getText();  // الباسورد
+    String username = jTextField2.getText().trim();
+    String email = jTextField4.getText().trim();
+    String password = jTextField3.getText().trim();
 
-        // إعداد الاستعلام المشترك لتحديث جدول اليوزر
-        String updateUserQuery = "UPDATE User SET username = ?, password = ? WHERE ref_id = ?";
+    // تحقق من وجود اسم المستخدم مسبقاً في جدول user (باستثناء المستخدم الحالي، ونفس الدور فقط)
+    String checkUsernameQuery = "SELECT COUNT(*) FROM user WHERE username = ? AND ref_id <> ? AND role = ?";
+    PreparedStatement pstCheck = con.prepareStatement(checkUsernameQuery);
+    pstCheck.setString(1, username);
+    pstCheck.setInt(2, refId);
+    pstCheck.setString(3, role);
+    ResultSet rs = pstCheck.executeQuery();
 
-        // تحديث جدول اليوزر
-        PreparedStatement pstUser = con.prepareStatement(updateUserQuery);
-        pstUser.setString(1, username);
-        pstUser.setString(2, password);
-        pstUser.setInt(3, refId);  // استخدام refId هنا
-        pstUser.executeUpdate();
-
-        // تحديد الاستعلام بناءً على الدور
-        if (role.equals("patient")) {
-            // إذا كان الدور مريضًا، نقوم بتحديث جدول المرضى
-            String updatePatientQuery = "UPDATE Patient SET name = ?, password = ?, email = ? WHERE patient_id = ?";
-            PreparedStatement pstPatient = con.prepareStatement(updatePatientQuery);
-            pstPatient.setString(1, username);  // تحديث النيم
-            pstPatient.setString(2, password);  // تحديث الباسورد
-            pstPatient.setString(3, email);     // تحديث الإيميل
-            pstPatient.setInt(4, refId);        // استخدام patient_id (refId)
-            pstPatient.executeUpdate();
-            JOptionPane.showMessageDialog(null, "تم تحديث بيانات المريض بنجاح");
-        } else if (role.equals("doctor")) {
-            // إذا كان الدور طبيبًا، نقوم بتحديث جدول الأطباء
-            String updateDoctorQuery = "UPDATE Doctor SET name = ?, password = ?, email = ? WHERE doctor_id = ?";
-            PreparedStatement pstDoctor = con.prepareStatement(updateDoctorQuery);
-            pstDoctor.setString(1, username);  // تحديث النيم
-            pstDoctor.setString(2, password);  // تحديث الباسورد
-            pstDoctor.setString(3, email);     // تحديث الإيميل
-            pstDoctor.setInt(4, refId);        // استخدام doctor_id (refId)
-            pstDoctor.executeUpdate();
-            JOptionPane.showMessageDialog(null, "تم تحديث بيانات الطبيب بنجاح");
+    if (rs.next()) {
+        int count = rs.getInt(1);
+        if (count > 0) {
+            JOptionPane.showMessageDialog(null, "اسم المستخدم موجود مسبقاً. الرجاء اختيار اسم آخر.");
+            return;
         }
-
-    } catch (SQLException e) {
-        // في حال حدوث خطأ في قاعدة البيانات
-        JOptionPane.showMessageDialog(null, "خطأ في تحديث البيانات:\n" + e.toString());
-    } catch (Exception e) {
-        // في حال حدوث خطأ آخر
-        JOptionPane.showMessageDialog(null, "حدث خطأ أثناء عملية التحديث:\n" + e.toString());
     }
+
+    // تحديث جدول user باستخدام ref_id و role معًا لتحديد السطر بدقة
+    String updateUserQuery = "UPDATE user SET username = ?, password = ? WHERE ref_id = ? AND role = ?";
+    PreparedStatement pstUser = con.prepareStatement(updateUserQuery);
+    pstUser.setString(1, username);
+    pstUser.setString(2, password);
+    pstUser.setInt(3, refId);
+    pstUser.setString(4, role);
+    pstUser.executeUpdate();
+
+    // تحديث بيانات المريض إذا كان الدور patient
+    if (role.equals("patient")) {
+        String updatePatientQuery = "UPDATE Patient SET name = ?, password = ?, email = ? WHERE patient_id = ?";
+        PreparedStatement pstPatient = con.prepareStatement(updatePatientQuery);
+        pstPatient.setString(1, username);
+        pstPatient.setString(2, password);
+        pstPatient.setString(3, email);
+        pstPatient.setInt(4, refId);
+        pstPatient.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "تم تحديث بيانات المريض بنجاح");
+    }
+
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, "خطأ في تحديث البيانات:\n" + e.toString());
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "حدث خطأ أثناء عملية التحديث:\n" + e.toString());
+}
+
+
     
 
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -633,6 +639,33 @@ try (Connection con = DriverManager.getConnection(url, user, passwordd)) {
         JOptionPane.showMessageDialog(null, "يرجى إدخال عمر صحيح");
     }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+      try {
+       Connection conn = DriverManager.getConnection(url, user, passwordd);
+        String query = "SELECT * FROM Patient WHERE patient_id = ?";
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setInt(1, Session.refId);  // نستخدم refId المحفوظ من الجلسة
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            jTextField2.setText(rs.getString("name"));
+            jTextField3.setText(rs.getString("password"));
+            jTextField5.setText(rs.getString("phone"));
+            jTextField1.setText(rs.getString("address"));
+            jTextField6.setText(String.valueOf(rs.getInt("age")));
+            jTextField4.setText(rs.getString("email"));
+        } else {
+            JOptionPane.showMessageDialog(this, "المريض غير موجود.");
+        }
+
+        conn.close();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "فشل الاتصال بقاعدة البيانات.");
+    }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
