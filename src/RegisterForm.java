@@ -274,7 +274,7 @@ try {
 
     if (role.equals("Patient")) {
         String sql = "INSERT INTO Patient (name, age, gender, email, phone, password, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);// للحصول علي id 
         pst.setString(1, fullName);
         pst.setInt(2, age);
         pst.setString(3, gender);
@@ -286,7 +286,7 @@ try {
 
         ResultSet generatedKeys = pst.getGeneratedKeys();
         if (generatedKeys.next()) {
-            refId = generatedKeys.getInt(1);
+            refId = generatedKeys.getInt(1);// للحصول علي id 
         }
     }  else if (role.equals("Doctor")) {
     int specializationId = jComboBox2.getSelectedIndex() + 1;

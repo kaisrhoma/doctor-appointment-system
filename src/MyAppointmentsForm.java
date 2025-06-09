@@ -517,34 +517,6 @@ jLabel1.setIcon(new ImageIcon(img));
             JOptionPane.showMessageDialog(null, "تم حذف بيانات المريض من جميع الجداول.");
         }
 
-        else if (role.equals("doctor")) {
-            // حذف المواعيد المرتبطة بالطبيب
-            String deleteAppointments = "DELETE FROM Appointment WHERE doctor_id = ?";
-            PreparedStatement pst1 = con.prepareStatement(deleteAppointments);
-            pst1.setInt(1, refId);
-            pst1.executeUpdate();
-
-            // حذف أوقات التوفر للطبيب
-            String deleteAvailableTime = "DELETE FROM AvailableTime WHERE doctor_id = ?";
-            PreparedStatement pst2 = con.prepareStatement(deleteAvailableTime);
-            pst2.setInt(1, refId);
-            pst2.executeUpdate();
-
-            // حذف من جدول الأطباء
-            String deleteDoctor = "DELETE FROM Doctor WHERE doctor_id = ?";
-            PreparedStatement pst3 = con.prepareStatement(deleteDoctor);
-            pst3.setInt(1, refId);
-            pst3.executeUpdate();
-
-            // حذف من جدول المستخدمين
-            String deleteUser = "DELETE FROM User WHERE ref_id = ?";
-            PreparedStatement pst4 = con.prepareStatement(deleteUser);
-            pst4.setInt(1, refId);
-            pst4.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "تم حذف بيانات الطبيب من جميع الجداول.");
-        }
-
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, "خطأ في الحذف:\n" + e.toString());
     }    

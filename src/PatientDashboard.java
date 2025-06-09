@@ -1,4 +1,4 @@
-
+ 
 import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,9 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PatientDashboard extends javax.swing.JFrame {
 
-    PatientDashboard(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
      String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
@@ -45,7 +43,7 @@ public class PatientDashboard extends javax.swing.JFrame {
     try (Connection conn = DriverManager.getConnection(url, user, password);
          PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        stmt.setInt(1, Session.userID); // تمرير الـ ID الخاص بالمريض في الاستعلام
+        stmt.setInt(1, Session.refId); // تمرير الـ ID الخاص بالمريض في الاستعلام
 
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -78,7 +76,7 @@ public void countTodayAppointments() {
     try (Connection conn = DriverManager.getConnection(url, user, password);
          PreparedStatement pst = conn.prepareStatement(query)) {
 
-        pst.setInt(1,Session.userID ); // هذا هو الـ patient_id اللي مررناه
+        pst.setInt(1,Session.refId ); // هذا هو الـ patient_id اللي مررناه
 
         ResultSet rs = pst.executeQuery();
 
