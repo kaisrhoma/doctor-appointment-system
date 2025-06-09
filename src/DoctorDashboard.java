@@ -1,17 +1,21 @@
-
+//مكتبات التعامل مع الصور
 import java.awt.Image;
+import javax.swing.ImageIcon;
+//مكتبات التعامل مع قاعدة البيانات
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+//مكتبات التعامل مع التاريخ والوقت
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+// مكتبة التعامل مع الجدول
 import javax.swing.table.DefaultTableModel;
+
+import javax.swing.JOptionPane;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,6 +43,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
         Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
         jLabel1.setIcon(new ImageIcon(img));
+        todayAppointments();
     }
 
     //نصوص الاتصال بقاعدة البيانات
@@ -693,7 +698,30 @@ public class DoctorDashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    //عدد طلبات اليوم
+    public void todayAppointments(){
+        int count = 0;
+        LocalDate dateToday = LocalDate.now();
+        String query = "SELECT a.appointment_id, a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
+                   "p.phone, a.note AS description, p.gender " +
+                   "FROM Appointment a " +
+                   "JOIN Patient p ON a.patient_id = p.patient_id " +
+                   "WHERE doctor_id = ? AND status = 'not completed' AND a.appointment_date = ?"; // بدل الرقم حسب المستخدم
+
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, doctorId);
+        stmt.setDate(2, java.sql.Date.valueOf(dateToday));
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            count++;
+        }
+        todayapp.setText("" + count);
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
+    }
+    }
     
     //جلت البيانات من قاعده البيانات
     public void fillTableFromDatabase() {
@@ -728,7 +756,6 @@ public class DoctorDashboard extends javax.swing.JFrame {
         }
         allapp.setText("" + count);
     } catch (SQLException e) {
-        e.printStackTrace();
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
 }
@@ -822,7 +849,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     
-    //تحجيث عرض المواعيج من تاريخ اليوم الى اخر موعد محجوز
+    //عرض كل المواعيد الخاصة بالطبيب
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         fillTableFromDatabase();
@@ -920,7 +947,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     JOptionPane.showMessageDialog(this, "تم حفظ الأوقات المتاحة بنجاح!");
     conn.close();
 
-} catch (Exception e) {
+} catch (SQLException e) {
     JOptionPane.showMessageDialog(this, "خطأ أثناء حفظ الأوقات: " + e.getMessage());
 }
 

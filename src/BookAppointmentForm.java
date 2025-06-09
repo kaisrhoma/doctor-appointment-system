@@ -1,25 +1,26 @@
-
+//مكتبات التعامل مع التاريخ والوقت
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.github.lgooddatepicker.optionalusertools.DateVetoPolicy;
 import com.github.lgooddatepicker.optionalusertools.TimeVetoPolicy;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+//مكتبات التعامل مع الصور
 import java.awt.Image;
+import javax.swing.ImageIcon;
+//مكتبات التعامل مع قاعدة البيانات
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+// مكتبة التعامل مع الجدول
 import javax.swing.table.DefaultTableModel;
+
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -47,9 +48,11 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         listener();
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
-Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
-jLabel1.setIcon(new ImageIcon(img));
+        Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
+        jLabel1.setIcon(new ImageIcon(img));
     }
+    
+    
     String url = "jdbc:mysql://localhost:3306/ClinicSystem";
     String user = "root";
     String password = "0000";
@@ -498,6 +501,7 @@ jLabel1.setIcon(new ImageIcon(img));
         pack();
     }// </editor-fold>//GEN-END:initComponents
  
+    //مستمع للتحقق من اي تغيير يحدث للقائمة المنسدلة الخاصة بالاطباء ونقلها للداتا تايم بيكر
     public void listener(){
         datePicker1.addDateChangeListener(dateChangeEvent -> {
     if (datePicker1.getDate() != null && jComboBox3.getSelectedItem() != null) {
@@ -506,6 +510,9 @@ jLabel1.setIcon(new ImageIcon(img));
     }
 });
     }
+    
+    
+    //دالة تأخذ اسم الدكتور وترجع لنا ال اي دي الخاص به
     public int getDoctorId(String doc_Name){
       try(Connection co = DriverManager.getConnection(url,user,password)){
       String q = "SELECT doctor_id FROM doctor WHERE name = ?";
@@ -521,12 +528,14 @@ jLabel1.setIcon(new ImageIcon(img));
       return 1;
     }
     
+    
+    
+    //دالة تأخذ اسم التخصص وترجع لي جميع الاطباء بنفس التخصص وتضعهم في قائمة منسدلة
     public void special(String sp) {
     if (sp == null || sp.isEmpty()) {
         JOptionPane.showMessageDialog(null, "Please select a specialization.");
         return;
     }
-
     // إفراغ combobox 3 قبل إضافة الأطباء الجدد
     jComboBox3.removeAllItems(); 
 
@@ -553,7 +562,7 @@ jLabel1.setIcon(new ImageIcon(img));
 
 
 
-    
+    //دالة تأخذ اي دي الدكتور و التاريخ المختار و ترجع الوقت المتاح لهذا الدكتور
     private void loadAvailableTimesForDate(int selectedDoctorId, LocalDate selectedDate) {
     try {
         Connection conn = DriverManager.getConnection(url, user, password);
@@ -580,16 +589,14 @@ jLabel1.setIcon(new ImageIcon(img));
                 return isAllowed;
             }
         });
-
         conn.close();
-
-    } catch (Exception e) {
-        e.printStackTrace();
+    } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "خطأ أثناء تحميل الأوقات المتاحة: " + e.getMessage());
     }
 }
 
 
+    //دالة تأخذ الدكتور وترجع لي التاريخ المتاح لهذا الدكتور
     private void loadAvailableDates(int selectedDoctorId) {
     try {
         Connection conn = DriverManager.getConnection(url,user,password);
@@ -612,20 +619,16 @@ jLabel1.setIcon(new ImageIcon(img));
         return availableDates.contains(date);
         }
         });
-
-        
         conn.close();
         
-    } catch (Exception e) {
-        e.printStackTrace();
+    } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "خطأ أثناء تحميل التواريخ المتاحة: " + e.getMessage());
     }
 }
 
 
-    
-    public void insertAppointment() {
-        
+    //دالة حجز موعد
+    public void insertAppointment() {  
     try (Connection con = DriverManager.getConnection(url, user, password)) {
         Integer did = getDoctorId(jComboBox3.getSelectedItem().toString());
         String q2 = "INSERT INTO Appointment (patient_id, doctor_id, appointment_date, appointment_time, status, note) " +
@@ -647,8 +650,9 @@ jLabel1.setIcon(new ImageIcon(img));
     }
 }
 
-    public void updateAppointment() {
-        
+    
+    //تعديل بيانات حجز موعد
+    public void updateAppointment() {      
     try (Connection con = DriverManager.getConnection(url, user, password)) {
         Integer did = getDoctorId(jComboBox3.getSelectedItem().toString());
         String q = "UPDATE Appointment SET patient_id = ?, doctor_id = ?, appointment_date = STR_TO_DATE(?, '%M %d, %Y')," + 
@@ -674,7 +678,9 @@ jLabel1.setIcon(new ImageIcon(img));
         JOptionPane.showMessageDialog(null, "There is an error: " + ex.toString());
     }
 }
+ 
     
+    //ملئ الجدول بالمواعيد المحجوزة للمريض والغير مكتملة
     public void fillTableFromDatabase() {
     String query = "SELECT a.appointment_id, d.name AS doctor_name, s.name AS specialization, " +
                    "a.appointment_date, a.appointment_time, p.name AS patient_name, p.age, " +
@@ -717,25 +723,29 @@ jLabel1.setIcon(new ImageIcon(img));
 
 
 
-    // للتجربة فقط
+    // زر النقل الى نافذة لوحة التحكم الخاصة بالمريض
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         new PatientDashboard().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    //زر النقل الى نافذة حجز المواعيد
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         new BookAppointmentForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    //زر النقل الى نافذة تعديل البيانات الشخصية وبيانات تسجيل الدخول
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         new MyAppointmentsForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    
+    //زر تسجيل الخروج يرجعك لنافذة تسجيل الدخول
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         Integer s = JOptionPane.showConfirmDialog(null,"Are you sure you want to log out? ","Log Out",0,3);
@@ -748,12 +758,14 @@ jLabel1.setIcon(new ImageIcon(img));
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    //استدعاء دالة حجز موعد ودالة ملئ الجدول عند النقر على زر حجز الموعد
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         insertAppointment();
         fillTableFromDatabase();
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    //حدث يستدعي دالة التخصص بمجرد تغير التخصص
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         if (jComboBox3 == null) {
@@ -764,12 +776,13 @@ jLabel1.setIcon(new ImageIcon(img));
     if (selectedSpecialization != null) {
         special(selectedSpecialization);
     }
-
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    
+    
+    // الكود الذي سيعمل عند النقر على الصف في الجدول
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-        // الكود الذي سيعمل عند النقر على الصف في الجدول
+        
     int selectedRow = jTable1.getSelectedRow();
     if (selectedRow != -1) {
         String doctorName = jTable1.getValueAt(selectedRow, 1).toString();
@@ -793,17 +806,20 @@ jLabel1.setIcon(new ImageIcon(img));
     }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    //زر تحديث بيانات المنوعد يستدعي دالة التحديث ويملئ الجدول
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         updateAppointment();
         fillTableFromDatabase();
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        // TODO add your handling code here:
-        
+        // TODO add your handling code here:    
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
+    
+    //الغاء حجز الموعد بتغيير الحالة الى كانسل
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
     try (Connection con = DriverManager.getConnection(url, user, password)) {
@@ -824,12 +840,16 @@ jLabel1.setIcon(new ImageIcon(img));
     fillTableFromDatabase();
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    
+    //تحميل المواعيد المتاحة الخاصة بالطبيب المختار
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         int d_id = getDoctorId(jComboBox3.getSelectedItem().toString());
         loadAvailableDates(d_id);
     }//GEN-LAST:event_jButton8ActionPerformed
 
+    
+    //اظهار رسالة للتأكيد على اغلاق المنظومة
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         Integer s = JOptionPane.showConfirmDialog(null,"Are you sure Do you want close the system","Close System",0,3);
