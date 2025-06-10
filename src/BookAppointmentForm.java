@@ -21,6 +21,9 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -50,6 +53,7 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/doc.png"));
         Image img = icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
         jLabel1.setIcon(new ImageIcon(img));
+        centerTableCells();
     }
     
     
@@ -501,6 +505,16 @@ public class BookAppointmentForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
  
+   //محاذات اعمدة الجدول في المنتصف
+   private void centerTableCells() {
+     DefaultTableCellRenderer centerRenderer  = new DefaultTableCellRenderer();
+     centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+     for (int i = 0; i < jTable1.getColumnCount(); i++){
+         jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+     }
+   }
+    
+    
     //مستمع للتحقق من اي تغيير يحدث للقائمة المنسدلة الخاصة بالاطباء ونقلها للداتا تايم بيكر
     public void listener(){
         datePicker1.addDateChangeListener(dateChangeEvent -> {

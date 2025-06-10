@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.table.DefaultTableModel;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 
 /*
@@ -698,6 +700,17 @@ public class DoctorDashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    //محاذات اعمدة الجدول في المنتصف
+   private void centerTableCells() {
+     DefaultTableCellRenderer centerRenderer  = new DefaultTableCellRenderer();
+     centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+     for (int i = 0; i < jTable1.getColumnCount(); i++){
+         jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+     }
+   }
+    
+    
     //عدد طلبات اليوم
     public void todayAppointments(){
         int count = 0;
@@ -758,6 +771,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
+    centerTableCells();
 }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -894,6 +908,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, "فشل في جلب البيانات من قاعدة البيانات");
     }
+    centerTableCells();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     
